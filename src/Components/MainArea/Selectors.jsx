@@ -1,52 +1,83 @@
 import React from "react";
-import S from "./InputExchange.module.css"
-import {UpdateFirstBox} from "../../Redux/CurrencyReducer";
+import S from "./Selectors.module.css"
 
-class InputExchange extends React.Component{
+class Selectors extends React.Component{
     state={
-        First_value:this.props.First_box,
-        Second_value:this.props.Second_box
+        FirstSelectorValue:"UAH Гривня",
+        SecondSelectorValue:"USD Долар",
+        USD:this.props.USD,
+         firstToSecond:this.props.USD,
+        EUR:this.props.EUR
     }
+    setFTS=(fv,sv)=>{
+      if(fv==="UAH Гривня" && sv==="UAH Гривня")
+      {
+          this.props.SetFirstToSecond(1)
+      }
+      else if(fv==="UAH Гривня" && sv==="USD Долар")
+      {
+          let n=1/this.state.USD
+          this.props.SetFirstToSecond(n.toFixed(3))
+      }
+      else if(fv==="UAH Гривня" && sv==="EUR Євро")
+      {
+          let n=1/this.state.EUR
+          this.props.SetFirstToSecond(n.toFixed(3))
+      }
+      else if(fv==="EUR Євро" && sv==="EUR Євро")
+      {
+          this.props.SetFirstToSecond(1)
 
-    UpdateText1=(e)=>{
-       let n= Number(e.currentTarget.value)
-        if(!isNaN(n))
-        {
-            this.setState({First_value:n})
-            this.props.UpdateFirstBox(n)
-        }
+      }
+      else if(fv==="EUR Євро" && sv==="UAH Гривня")
+      {
+          this.props.SetFirstToSecond(this.state.EUR)
+
+      }
+      else if(fv==="EUR Євро" && sv==="USD Долар")
+      {
+          let n=this.state.USD/this.state.EUR
+          this.props.SetFirstToSecond(n.toFixed(3))
+      }
+      else if(fv==="USD Долар" && sv==="USD Долар")
+      {
+          this.props.SetFirstToSecond(1)
+
+      }
+      else if(fv==="USD Долар" && sv==="UAH Гривня")
+      {
+          this.props.SetFirstToSecond(this.state.USD)
+
+      }
+      else if(fv==="USD Долар" && sv==="EUR Євро")
+      {
+          let n=this.state.EUR/this.state.USD
+          this.props.SetFirstToSecond(n.toFixed(3))
+      }
 
     }
-    UpdateText2=(e)=>{
-        let n= Number(e.currentTarget.value)
-        if(!isNaN(n))
-        {
-            this.setState({Second_value:n})
-            this.props.UpdateSecondBox(n)
-        }
-
+    getFirstValue=(e)=>{
+        this.setState({FirstSelectorValue:e.target.value})
+        this.setFTS(e.target.value,this.state.SecondSelectorValue)
     }
-    Swap=()=>{
-        let temp1=this.state.First_value
-        let temp2=this.state.Second_value
-        this.setState({First_value:temp2,Second_value:temp1})
-        this.props.UpdateFirstBox(this.state.Second_value)
-        this.props.UpdateSecondBox(this.state.First_value)
-
+    getSecondValue=(k)=>{
+        this.setState({SecondSelectorValue:k.target.value})
+        this.setFTS( this.state.FirstSelectorValue,k.target.value)
     }
-    render(){
-        console.log(this.props.First_box)
-        console.log(this.props.Second_box)
-        return<>
-            <input onChange={this.UpdateText1}  value={this.state.First_value} className={S.InputBox}/>
-            <img onClick={this.Swap} className={S.ExchangeImg} src={'https://media.istockphoto.com/vectors/exchange-arrow-transfer-icon-logo-vector-isloated-on-white-background-vector-id1200593178?k=20&m=1200593178&s=612x612&w=0&h=u_rUdLSdDSYjhIdtbmlTjZ_A-wtd-Yu0EAJ4wA9HFkQ='}/>
-            <input onChange={this.UpdateText2}  value={this.state.Second_value} className={S.InputBox}/>
-        </>
+    render() {
+        //console.log(this.props.FirstToSecond)
+        return<div  className={S.SelectorArea}>
+            <select  onChange={this.getFirstValue} className={S.Selector} value={this.state.FirstSelectorValue}>
+                <option>USD Долар</option>
+                <option>EUR Євро </option>
+                <option>UAH Гривня</option>
+            </select>
+            <select onChange={this.getSecondValue} className={S.SelectorSecond} value={this.state.SecondSelectorValue}>
+                <option>USD Долар</option>
+                <option>EUR Євро </option>
+                <option>UAH Гривня</option>
+            </select>
+        </div>
     }
-
 }
-
-export default InputExchange
-
-
-
+export default Selectors

@@ -1,7 +1,6 @@
-
 .CurrencyBox{
     border-radius: 15px;
-    height: 300px;
+    height: 200px;
     width: 700px;
     border: 1px solid darkgray;
     padding: 50px;
@@ -12,5 +11,4 @@
     font-weight: bold;
     margin: auto;
     font-size: 30px;
-
 }

@@ -9,8 +9,12 @@
     padding-right:100px;
     font-size: 24px;
     float: right;
+    color: wheat;
 }
 .Image {
     height: 50px;
     width: 50px;
+}
+.Currency{
+    color: white;
 }

@@ -1,26 +1,50 @@
 import React from "react";
-import S from "./MainArea.module.css"
-import * as axios from "axios";
-import {UpdateUSD} from "../../Redux/CurrencyReducer";
+import S from "./InputExchange.module.css"
 
- const MainArea=(props)=>{
-axios.get('https://bank.gov.ua/NBUStatService/v1/statdirectory/exchange?json').then(responce=>{
-    props.UpdateUSD(responce.data[25].rate.toFixed(2))
-    props.UpdateEUR(responce.data[32].rate.toFixed(2))
-})
-    return <>
-    <div className={S.Name}>Конвертер валют</div>
-     <div className={S.CurrencyBox}>
-         <div>
-             <input  className={S.InputBox}/>
-             <img className={S.ExchangeImg} src={'https://media.istockphoto.com/vectors/exchange-arrow-transfer-icon-logo-vector-isloated-on-white-background-vector-id1200593178?k=20&m=1200593178&s=612x612&w=0&h=u_rUdLSdDSYjhIdtbmlTjZ_A-wtd-Yu0EAJ4wA9HFkQ='}/>
-             <input className={S.InputBox}/>
-         </div>
+class InputExchange extends React.Component{
+    state={
+        First_value:this.props.First_box,
+        Second_value:this.props.First_box*this.props.FirstToSecond
+    }
 
-    </div>
-    </>
+    UpdateText1=(e)=>{
+       let n= Number(e.currentTarget.value)
+        if(!isNaN(n))
+        {
+            let N=n*this.props.FirstToSecond
+            this.setState({First_value:n,Second_value:N.toFixed(3)})
+            this.props.UpdateFirstBox(n)
+        }
+
+    }
+    UpdateText2=(e)=>{
+        let n= Number(e.currentTarget.value)
+        if(!isNaN(n))
+        {
+            let N=n/this.props.FirstToSecond
+            this.setState({Second_value:n,First_value:N.toFixed(3)})
+            this.props.UpdateSecondBox(n)
+        }
+    }
+
+    componentDidUpdate(prevProps, prevState) {
+        if(prevProps.FirstToSecond!=this.props.FirstToSecond)
+         {
+             this.setState({First_value:this.props.First_box,Second_value:this.props.First_box*this.props.FirstToSecond})
+         }
+    }
+
+    render(){
+        console.log(this.state.Second_value)
+        return<>
+            <input onChange={this.UpdateText1}  value={this.state.First_value} className={S.InputBox1}/>
+            <input onChange={this.UpdateText2}  value={this.state.Second_value} className={S.InputBox2}/>
+        </>
+    }
+
 }
-export default MainArea
+
+export default InputExchange
 
 
 
