@@ -1,4 +1,4 @@
-import { combineReducers, legacy_createStore} from "redux";
+import {combineReducers, legacy_createStore} from "redux";
 import CurrencyReducer from "./CurrencyReducer";
 
 let reducers = combineReducers({

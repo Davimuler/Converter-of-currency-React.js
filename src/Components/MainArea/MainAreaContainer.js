@@ -1,5 +1,5 @@
 import MainArea from "./MainArea";
-import { connect } from "react-redux";
+import {connect} from "react-redux";
 import {
     UpdateUSD,
     UpdateEUR,
@@ -10,14 +10,19 @@ import {
 
 const mapStateToProps = (state) => {
     return {
-        FirstToSecond:state.Currency.FirstToSecond,
-        USD:state.Currency.USD,
-        EUR:state.Currency.EUR,
-        First_box: state.Currency.First_box,
-        Second_box: state.Currency.Second_box
+        firstToSecond: state.Currency.firstToSecond,
+        usd: state.Currency.usd,
+        eur: state.Currency.eur,
+        first_box: state.Currency.first_box,
+        second_box: state.Currency.second_box
     };
 };
 
 
-
-export const MainAreaContainer= connect(mapStateToProps,{SetFirstToSecond,UpdateUSD,UpdateEUR,UpdateFirstBox,UpdateSecondBox},null, {forwardRef: true})(MainArea)
+export const MainAreaContainer = connect(mapStateToProps, {
+    SetFirstToSecond,
+    UpdateUSD,
+    UpdateEUR,
+    UpdateFirstBox,
+    UpdateSecondBox
+}, null, {forwardRef: true})(MainArea)

@@ -1,83 +1,68 @@
 import React from "react";
 import S from "./Selectors.module.css"
 
-class Selectors extends React.Component{
-    state={
-        FirstSelectorValue:"UAH Гривня",
-        SecondSelectorValue:"USD Долар",
-        USD:this.props.USD,
-         firstToSecond:this.props.USD,
-        EUR:this.props.EUR
+class Selectors extends React.Component {
+    state = {
+        firstSelectorValue: "USD Долар",
+        secondSelectorValue: "UAH Гривня",
+        usd: this.props.usd,
+        firstToSecond: this.props.usd,
+        eur: this.props.eur,
+        uah: 1
     }
-    setFTS=(fv,sv)=>{
-      if(fv==="UAH Гривня" && sv==="UAH Гривня")
-      {
-          this.props.SetFirstToSecond(1)
-      }
-      else if(fv==="UAH Гривня" && sv==="USD Долар")
-      {
-          let n=1/this.state.USD
-          this.props.SetFirstToSecond(n.toFixed(3))
-      }
-      else if(fv==="UAH Гривня" && sv==="EUR Євро")
-      {
-          let n=1/this.state.EUR
-          this.props.SetFirstToSecond(n.toFixed(3))
-      }
-      else if(fv==="EUR Євро" && sv==="EUR Євро")
-      {
-          this.props.SetFirstToSecond(1)
+    getCourse = (value) => {
+        switch (value) {
+            case "UAH Гривня": {
+                return this.state.uah
+            }
+            case "USD Долар": {
+                return this.state.usd
+            }
+            case "EUR Євро": {
+                return this.state.eur
+            }
+        }
+    }
 
-      }
-      else if(fv==="EUR Євро" && sv==="UAH Гривня")
-      {
-          this.props.SetFirstToSecond(this.state.EUR)
-
-      }
-      else if(fv==="EUR Євро" && sv==="USD Долар")
-      {
-          let n=this.state.USD/this.state.EUR
-          this.props.SetFirstToSecond(n.toFixed(3))
-      }
-      else if(fv==="USD Долар" && sv==="USD Долар")
-      {
-          this.props.SetFirstToSecond(1)
-
-      }
-      else if(fv==="USD Долар" && sv==="UAH Гривня")
-      {
-          this.props.SetFirstToSecond(this.state.USD)
-
-      }
-      else if(fv==="USD Долар" && sv==="EUR Євро")
-      {
-          let n=this.state.EUR/this.state.USD
-          this.props.SetFirstToSecond(n.toFixed(3))
-      }
+    setFTS = (fv, sv) => {
+        let tempValue1 = this.getCourse(fv)
+        let tempValue2 = this.getCourse(sv)
+        let N=tempValue1 / tempValue2
+        this.props.SetFirstToSecond(N.toFixed(3))
+    }
+    getValue = (e, selector) => {
+        switch (selector) {
+            case 1: {
+                this.setState({firstSelectorValue: e.target.value})
+                this.setFTS(e.target.value, this.state.secondSelectorValue)
+                return
+            }
+            case 2: {
+                this.setState({secondSelectorValue: e.target.value})
+                this.setFTS(this.state.firstSelectorValue, e.target.value)
+            }
+        }
 
     }
-    getFirstValue=(e)=>{
-        this.setState({FirstSelectorValue:e.target.value})
-        this.setFTS(e.target.value,this.state.SecondSelectorValue)
-    }
-    getSecondValue=(k)=>{
-        this.setState({SecondSelectorValue:k.target.value})
-        this.setFTS( this.state.FirstSelectorValue,k.target.value)
-    }
+
     render() {
-        //console.log(this.props.FirstToSecond)
-        return<div  className={S.SelectorArea}>
-            <select  onChange={this.getFirstValue} className={S.Selector} value={this.state.FirstSelectorValue}>
+        return <div className={S.SelectorArea}>
+            <select onChange={(e) => {
+                this.getValue(e, 1)
+            }} className={S.Selector} value={this.state.firstSelectorValue}>
                 <option>USD Долар</option>
-                <option>EUR Євро </option>
+                <option>EUR Євро</option>
                 <option>UAH Гривня</option>
             </select>
-            <select onChange={this.getSecondValue} className={S.SelectorSecond} value={this.state.SecondSelectorValue}>
+            <select onChange={(e) => {
+                this.getValue(e, 2)
+            }} className={S.Selector} value={this.state.secondSelectorValue}>
                 <option>USD Долар</option>
-                <option>EUR Євро </option>
+                <option>EUR Євро</option>
                 <option>UAH Гривня</option>
             </select>
         </div>
     }
 }
+
 export default Selectors
